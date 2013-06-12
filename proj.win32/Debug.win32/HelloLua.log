@@ -1,0 +1,48 @@
+﻿生成启动时间为 2013/6/10 14:15:09。
+     1>项目“G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\HelloLua.vcxproj”在节点 2 上(build 个目标)。
+     1>InitializeBuildStatus:
+         正在创建“Debug.win32\HelloLua.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       ClCompile:
+         F:\Program Files\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\Classes" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\scripting\lua\cocos2dx_support" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\scripting\lua\lua" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\scripting\lua\tolua" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\scripting\lua\src" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\cocos2dx" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\cocos2dx\include" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\cocos2dx\kazmath\include" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\cocos2dx\platform\win32" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\CocosDenshion\include" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\cocos2dx\platform\third_party\win32\OGLES" /I"G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\..\..\..\..\cocos2dx\platform\third_party\win32" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _WINDOWS /D STRICT /D _DEBUG /D COCOS2D_DEBUG=1 /D _CRT_SECURE_NO_WARNINGS /D _SCL_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug.win32\\" /Fd"Debug.win32\vc100.pdb" /Gd /TP /wd4267 /wd4251 /wd4244 /analyze- /errorReport:prompt ..\Classes\cocos2dx_support\LuaCocos2d.cpp
+         LuaCocos2d.cpp
+     1>g:\share\lhrcocos2d\cocos2d-x-copy\samples\lua\hellolua\classes\cocos2dx_support\luacocos2d.cpp(8904): warning C4996: 'cocos2d::CCFileUtils::setResourceDirectory': 被声明为已否决
+                 g:\share\lhrcocos2d\cocos2d-x-copy\cocos2dx\platform\ccfileutils.h(151) : 参见“cocos2d::CCFileUtils::setResourceDirectory”的声明
+     1>g:\share\lhrcocos2d\cocos2d-x-copy\samples\lua\hellolua\classes\cocos2dx_support\luacocos2d.cpp(8973): warning C4996: 'cocos2d::CCFileUtils::fullPathFromRelativePath': 被声明为已否决
+                 g:\share\lhrcocos2d\cocos2d-x-copy\cocos2dx\platform\ccfileutils.h(82) : 参见“cocos2d::CCFileUtils::fullPathFromRelativePath”的声明
+         所有输出均为最新。
+       ManifestResourceCompile:
+         所有输出均为最新。
+       Link:
+         F:\Program Files\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"G:\share\lhrcocos2d\cocos2d-x-copy\Debug.win32\HelloLua.exe" /INCREMENTAL /NOLOGO /LIBPATH:"G:\share\lhrcocos2d\cocos2d-x-copy\Debug.win32\\" libcurl_imp.lib libcocos2d.lib libCocosDenshion.lib opengl32.lib glew32.lib liblua.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug.win32\HelloLua.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"G:\share\lhrcocos2d\cocos2d-x-copy\Debug.win32\HelloLua.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"G:\share\lhrcocos2d\cocos2d-x-copy\Debug.win32\HelloLua.lib" /MACHINE:X86 Debug.win32\HelloLua.exe.embed.manifest.res
+         Debug.win32\AppDelegate.obj
+         Debug.win32\CCLuaEngine.obj
+         Debug.win32\Cocos2dxLuaLoader.obj
+         Debug.win32\LuaCocos2d.obj
+         Debug.win32\tolua_fix.obj
+         Debug.win32\cocos2d_ext_tolua.obj
+         Debug.win32\CCCrypto.obj
+         Debug.win32\md5.obj
+         Debug.win32\CCExtendActionInterval.obj
+         Debug.win32\CCExtendNode.obj
+         Debug.win32\CCExtendSprite.obj
+         Debug.win32\CCTextInput.obj
+         Debug.win32\CCHttpRequest.obj
+         Debug.win32\CCHttpRequest_impl.obj
+         Debug.win32\main.obj
+         "G:\share\lhrcocos2d\cocos2d-x-copy\Debug.win32\libcocos2d.lib"
+         "G:\share\lhrcocos2d\cocos2d-x-copy\Debug.win32\libCocosDenshion.lib"
+         "G:\share\lhrcocos2d\cocos2d-x-copy\Debug.win32\liblua.lib"
+       Manifest:
+         C:\Program Files\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug.win32\HelloLua.exe.embed.manifest" /manifest Debug.win32\HelloLua.exe.intermediate.manifest
+         所有输出均为最新。
+       LinkEmbedManifest:
+         所有输出均为最新。
+         HelloLua.vcxproj -> G:\share\lhrcocos2d\cocos2d-x-copy\Debug.win32\HelloLua.exe
+       FinalizeBuildStatus:
+         正在删除文件“Debug.win32\HelloLua.unsuccessfulbuild”。
+         正在对“Debug.win32\HelloLua.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“G:\share\lhrcocos2d\cocos2d-x-copy\samples\Lua\HelloLua\proj.win32\HelloLua.vcxproj”(build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:12.45
