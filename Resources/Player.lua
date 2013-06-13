@@ -62,9 +62,10 @@ function Player:ctor(level, x, y)
     
     local function onEnterOrExit(tag)
         --print("onEnterOrExit", tag.name)
-        if tag.name == "enter" then
+        if tag == "enter" then
             self:initAnimation()
             local function updateState(diff)
+                --print("update")
                 --保持30frame
                 --[[
                 if diff > 1/30 then
@@ -77,7 +78,7 @@ function Player:ctor(level, x, y)
             end
             --print("schedule update")
             self.updateEntry = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(updateState, 0, false)
-        elseif tag.name == "exit" then
+        elseif tag == "exit" then
             self.idleAnimation:release()
             self.runAnimation:release()
             self.jumpAnimation:release()
