@@ -8,7 +8,7 @@ function GameScene:ctor()
     self.numberOfLevels = 3   
     self.status = nil
 
-    SimpleAudioEngine:sharedEngine():playBackgroundMusic("music/Music.wma", true)
+    SimpleAudioEngine:sharedEngine():playBackgroundMusic("music/Music.mp3", true)
 
     local function onEnterOrExit(tag)
         if tag == "enter" then

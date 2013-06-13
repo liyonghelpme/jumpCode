@@ -213,7 +213,14 @@ function Level:loadTile(tileType, x, y)
     elseif tileType == 'G' then
         local bounds = self:getBounds(x-1, self.height-y)
         local px, py = bounds:getMidX(), bounds:getMidY()
-        local gem = Gem.new(self, px, py)
+        local gem = Gem.new(self, px, py, false)
+        self.bg:addChild(gem.bg)
+        table.insert(self.gems, gem)
+        tile = Tile.new(self, '.', x, y)
+    elseif tileType == 'P' then
+        local bounds = self:getBounds(x-1, self.height-y)
+        local px, py = bounds:getMidX(), bounds:getMidY()
+        local gem = Gem.new(self, px, py, true)
         self.bg:addChild(gem.bg)
         table.insert(self.gems, gem)
         tile = Tile.new(self, '.', x, y)
@@ -263,6 +270,17 @@ function Level:onGemCollected(gem)
             break
         end
     end
+end
+function Level:onPowerUp(gem)
+    for i = 0, #self.gems, 1 do
+        if self.gems[i] == gem then
+            self.score = self.score+1
+            self.scene:updateScore(self.score)
+            table.remove(self.gems, i)
+            break
+        end
+    end
+    self.player:onPowerUp()
 end
 function Level:onPlayerKilled(enemy)
     self.player:onKilled(enemy)

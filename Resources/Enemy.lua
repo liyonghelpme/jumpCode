@@ -20,16 +20,28 @@ function Enemy:initAnimation()
         end
         animation = CCAnimation:createWithSpriteFrames(frames, 0.1)
         self.runAnimation = CCRepeatForever:create(CCAnimate:create(animation))
+
+        cache:addSpriteFramesWithFile("monster/Die.plist")
+        local frames = CCArray:create()
+        for i = 0, 11, 1 do
+            local frame = cache:spriteFrameByName("m0Die"..i..".png")
+            frames:addObject(frame)
+        end
+        animation = CCAnimation:createWithSpriteFrames(frames, 0.1)
+        self.dieAnimation = CCAnimate:create(animation)
         
         self.idleAnimation:retain()
         self.runAnimation:retain()
+        self.dieAnimation:retain()
     end
 end
 function Enemy:clearAnimation()
     self.idleAnimation:release()
     self.runAnimation:release()
+    self.dieAnimation:release()
     self.idleAnimation = nil
     self.runAnimation = nil
+    self.dieAnimation = nil
 end
 function Enemy:runAction(act)
     if self.curAction ~= act then
@@ -52,6 +64,9 @@ function Enemy:ctor(level, px, py)
     self.waitTime = 0
     self.maxWaitTime = 0.5
     self.curAction = nil
+    self.isAlive = true
+
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/MonsterKilled.mp3")
 
     self.bg = CCSprite:create()
     self.bg:setPosition(ccp(px, py))
@@ -83,44 +98,54 @@ end
 --general moving enemy
 function Enemy:update(diff)
     local elapsed = diff
+
     local x, y = self.bg:getPosition()
-    local posX = x+self.width/2*self.direction
-    local tileX = math.floor(posX/StaticTile.Width)-self.direction
-    local tileY = math.floor(y/StaticTile.Height)
-    if self.waitTime > 0 then
-        self.waitTime = math.max(0, self.waitTime-elapsed)
-        if self.waitTime <= 0 then
-            self.direction = -self.direction
-        end
-    else
-        local collision0 = self.level:getCollision(tileX+self.direction, tileY-1)
-        local collision1 = self.level:getCollision(tileX+self.direction, tileY)
-        if collision1 == 'Impassable' or collision1 == 'Block' or collision0 == 'Passable' then
-            self.waitTime = self.maxWaitTime
+    if self.isAlive then
+
+        local posX = x+self.width/2*self.direction
+        local tileX = math.floor(posX/StaticTile.Width)-self.direction
+        local tileY = math.floor(y/StaticTile.Height)
+        if self.waitTime > 0 then
+            self.waitTime = math.max(0, self.waitTime-elapsed)
+            if self.waitTime <= 0 then
+                self.direction = -self.direction
+            end
         else
-            if self.level.player.isAlive then
-                local vx = self.direction*self.moveSpeed*elapsed
-                local vy = 0
-                self.bg:setPosition(ccp(x+vx, y))
+            local collision0 = self.level:getCollision(tileX+self.direction, tileY-1)
+            local collision1 = self.level:getCollision(tileX+self.direction, tileY)
+            if collision1 == 'Impassable' or collision1 == 'Block' or collision0 == 'Passable' then
+                self.waitTime = self.maxWaitTime
+            else
+                if self.level.player.isAlive then
+                    local vx = self.direction*self.moveSpeed*elapsed
+                    local vy = 0
+                    self.bg:setPosition(ccp(x+vx, y))
+                end
+            end
+
+        end
+        if not self.level.player.isAlive or self.waitTime > 0 then
+            self:runAction(self.idleAnimation)
+        else
+            self:runAction(self.runAnimation)
+        end
+        if self.direction > 0 then
+            self.bg:setFlipX(true)
+        else
+            self.bg:setFlipX(false)
+        end
+
+        local bounds = self:getBoundBox()
+        local playerBounds = self.level.player:getBoundBox()
+        if bounds:intersectsRect(playerBounds) then
+            if self.level.player:getIsPowerUp() then
+                self:onKilled() 
+            else
+                self.level:onPlayerKilled(self)
             end
         end
-
-    end
-    if not self.level.player.isAlive or self.waitTime > 0 then
-        self:runAction(self.idleAnimation)
     else
-        self:runAction(self.runAnimation)
-    end
-    if self.direction > 0 then
-        self.bg:setFlipX(true)
-    else
-        self.bg:setFlipX(false)
-    end
-
-    local bounds = self:getBoundBox()
-    local playerBounds = self.level.player:getBoundBox()
-    if bounds:intersectsRect(playerBounds) then
-        self.level:onPlayerKilled(self)
+        self:runAction(self.dieAnimation)
     end
 
     --超出摄像机一定距离
@@ -141,5 +166,9 @@ function Enemy:clearSelf()
     end
 end
 
+function Enemy:onKilled()
+    SimpleAudioEngine:sharedEngine():playEffect("music/MonsterKilled.mp3")
+    self.isAlive = false
+end
 
 

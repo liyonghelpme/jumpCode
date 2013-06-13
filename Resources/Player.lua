@@ -46,6 +46,19 @@ function Player:initAnimation()
         self.dieAnimation:retain()
     end
 end
+function Player:clearAnimation()
+    if self.powerUpSound ~= nil then
+        SimpleAudioEngine:sharedEngine():stopEffect(self.powerUpSound)
+    end
+    self.idleAnimation:release()
+    self.runAnimation:release()
+    self.jumpAnimation:release()
+    self.dieAnimation:release()
+    self.idleAnimation = nil
+    self.runAnimation = nil
+    self.jumpAnimation = nil
+    self.dieAnimation = nil
+end
 function Player:ctor(level, x, y)
     self.width = 29
     self.height = 60
@@ -59,9 +72,15 @@ function Player:ctor(level, x, y)
     self.inTouch = false
     self.inMove = 0
     self.isAlive = true
-    SimpleAudioEngine:sharedEngine():preloadEffect("music/PlayerKilled.wma")
-    SimpleAudioEngine:sharedEngine():preloadEffect("music/PlayerFall.wma")
-    SimpleAudioEngine:sharedEngine():preloadEffect("music/PlayerJump.wma")
+    self.maxPowerUpTime = 6
+    self.powerUpTime = 0
+    self.powerUpColors = {ccc3(255, 0, 0), ccc3(0, 0, 255), ccc3(255, 127, 80), ccc3(255, 255, 0)}
+    self.powerUpSound = nil
+
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/PlayerKilled.mp3")
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/PlayerFall.mp3")
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/PlayerJump.mp3")
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/Powerup.mp3")
     
     local function onEnterOrExit(tag)
         --print("onEnterOrExit", tag.name)
@@ -82,14 +101,7 @@ function Player:ctor(level, x, y)
             --print("schedule update")
             self.updateEntry = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(updateState, 0, false)
         elseif tag == "exit" then
-            self.idleAnimation:release()
-            self.runAnimation:release()
-            self.jumpAnimation:release()
-            self.dieAnimation:release()
-            self.idleAnimation = nil
-            self.runAnimation = nil
-            self.jumpAnimation = nil
-            self.dieAnimation = nil
+            self:clearAnimation()
             CCDirector:sharedDirector():getScheduler():unscheduleScriptEntry(self.updateEntry)
         end
     end
@@ -174,8 +186,6 @@ end
 --poll key pad state
 function Player:update(diff)
     --print("update Player", diff)
-
-    
     if self.isAlive then
         self.movement = 1
     end
@@ -184,6 +194,19 @@ function Player:update(diff)
         self.isJumping = true
     end
     self:applyPhysics(diff) 
+    if self.powerUpTime > 0 then
+        self.powerUpTime = math.max(0, self.powerUpTime-diff)
+        local t = math.floor(self.powerUpTime/self.maxPowerUpTime * 20) 
+        local ci = t%#self.powerUpColors
+        local c = self.powerUpColors[ci+1]
+        self.bg:setColor(c)
+    else
+        self.bg:setColor(ccc3(255, 255, 255))
+        if self.powerUpSound ~= nil then
+            --SimpleAudioEngine:sharedEngine():stopEffect(self.powerUpSound)
+            self.powerUpSound = nil
+        end
+    end
     if self.velocity.x > 0 then
         self.bg:setFlipX(true)
     elseif self.velocity.x < 0 then
@@ -397,7 +420,7 @@ function Player:doJump(vel, diff)
         --begin or continue
         if (not self.wasJumping and self.isOnGround) or self.jumpTime > 0 then
             if self.jumpTime == 0 then
-                SimpleAudioEngine:sharedEngine():playEffect("music/PlayerJump.wma", false)
+                SimpleAudioEngine:sharedEngine():playEffect("music/PlayerJump.mp3", false)
             end
             self.jumpTime = self.jumpTime+ diff
             self:runAction(self.jumpAnimation)
@@ -434,15 +457,26 @@ function Player:onTouchEnded(x, y)
     self.inMove = 0
 end
 
+function Player:getIsPowerUp()
+    return self.powerUpTime > 0
+end
 function Player:onKilled(enemy)
     --first dead
     if self.isAlive then
         if enemy == nil then
-            SimpleAudioEngine:sharedEngine():playEffect("music/PlayerFall.wma", false)
+            SimpleAudioEngine:sharedEngine():playEffect("music/PlayerFall.mp3", false)
         else
-            SimpleAudioEngine:sharedEngine():playEffect("music/PlayerKilled.wma", false)
+            SimpleAudioEngine:sharedEngine():playEffect("music/PlayerKilled.mp3", false)
         end
     end
     self.isAlive = false
     self:runAction(self.dieAnimation)
+end
+--add tint color animation
+function Player:onPowerUp()
+    self.powerUpTime = self.maxPowerUpTime
+    --音效本身6s
+    if self.powerUpSound == nil then
+        self.powerUpSound = SimpleAudioEngine:sharedEngine():playEffect("music/Powerup.mp3", false)
+    end
 end

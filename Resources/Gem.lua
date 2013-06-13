@@ -1,15 +1,22 @@
 require "Circle"
 require "Tile"
 Gem = class()
-function Gem:ctor(level, px, py)
+function Gem:ctor(level, px, py, powerUp)
     self.level = level
     self.bounce = 0
     self.passTime = 0
     self.basePosition = ccp(px, py)
+    self.isPowerUp = powerUp
+    if self.isPowerUp then
+        self.color = ccc3(255, 0, 0)
+    else
+        self.color = ccc3(255, 255, 0)
+    end
+
     self.bg = CCSprite:create("Gem.png")
     self.bg:setPosition(self.basePosition)
-    self.bg:setColor(ccc3(255, 255, 0))
-    SimpleAudioEngine:sharedEngine():preloadEffect("music/GemCollected.wma")
+    self.bg:setColor(self.color)
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/GemCollected.mp3")
     local size = self.bg:getContentSize()
     self.origin = ccp(size.width/2, size.height/2)
 
@@ -44,8 +51,14 @@ function Gem:update(diff)
     
     local boundCircle = self:getBoundCircle()
     if boundCircle:intersects(self.level.player:getBoundBox()) then
-        self.level:onGemCollected(self)
-        self.bg:removeFromParentAndCleanup(true)
-        SimpleAudioEngine:sharedEngine():playEffect("music/GemCollected.wma")
+        if self.isPowerUp then
+            self.level:onPowerUp(self)
+            self.bg:removeFromParentAndCleanup(true)
+            SimpleAudioEngine:sharedEngine():playEffect("music/GemCollected.mp3")
+        else
+            self.level:onGemCollected(self)
+            self.bg:removeFromParentAndCleanup(true)
+            SimpleAudioEngine:sharedEngine():playEffect("music/GemCollected.mp3")
+        end
     end
 end
