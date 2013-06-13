@@ -59,6 +59,9 @@ function Player:ctor(level, x, y)
     self.inTouch = false
     self.inMove = 0
     self.isAlive = true
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/PlayerKilled.wma")
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/PlayerFall.wma")
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/PlayerJump.wma")
     
     local function onEnterOrExit(tag)
         --print("onEnterOrExit", tag.name)
@@ -393,7 +396,9 @@ function Player:doJump(vel, diff)
     if self.isJumping then
         --begin or continue
         if (not self.wasJumping and self.isOnGround) or self.jumpTime > 0 then
-            --if self.jumpTime == 0 then
+            if self.jumpTime == 0 then
+                SimpleAudioEngine:sharedEngine():playEffect("music/PlayerJump.wma", false)
+            end
             self.jumpTime = self.jumpTime+ diff
             self:runAction(self.jumpAnimation)
         end
@@ -430,10 +435,14 @@ function Player:onTouchEnded(x, y)
 end
 
 function Player:onKilled(enemy)
-    self.isAlive = false
-    if enemy ~= nil then
-    else
+    --first dead
+    if self.isAlive then
+        if enemy == nil then
+            SimpleAudioEngine:sharedEngine():playEffect("music/PlayerFall.wma", false)
+        else
+            SimpleAudioEngine:sharedEngine():playEffect("music/PlayerKilled.wma", false)
+        end
     end
-    
+    self.isAlive = false
     self:runAction(self.dieAnimation)
 end

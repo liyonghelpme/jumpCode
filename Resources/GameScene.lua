@@ -8,6 +8,8 @@ function GameScene:ctor()
     self.numberOfLevels = 3   
     self.status = nil
 
+    SimpleAudioEngine:sharedEngine():playBackgroundMusic("music/Music.wma", true)
+
     local function onEnterOrExit(tag)
         if tag == "enter" then
             local function updateState(diff)

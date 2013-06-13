@@ -9,6 +9,7 @@ function Gem:ctor(level, px, py)
     self.bg = CCSprite:create("Gem.png")
     self.bg:setPosition(self.basePosition)
     self.bg:setColor(ccc3(255, 255, 0))
+    SimpleAudioEngine:sharedEngine():preloadEffect("music/GemCollected.wma")
     local size = self.bg:getContentSize()
     self.origin = ccp(size.width/2, size.height/2)
 
@@ -45,5 +46,6 @@ function Gem:update(diff)
     if boundCircle:intersects(self.level.player:getBoundBox()) then
         self.level:onGemCollected(self)
         self.bg:removeFromParentAndCleanup(true)
+        SimpleAudioEngine:sharedEngine():playEffect("music/GemCollected.wma")
     end
 end
